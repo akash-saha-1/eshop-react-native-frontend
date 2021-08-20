@@ -18,6 +18,7 @@ const ProductCard = (props) => {
   return (
     <View style={styles.container}>
       <Image
+        resizeMode="contain"
         style={styles.image}
         source={{
           uri: image
@@ -74,7 +75,7 @@ const styles = StyleSheet.create({
     height: width / 2 - 50,
     backgroundColor: 'transparent',
     marginTop: -5,
-    borderRadius: 100,
+    borderRadius: 10,
   },
   card: {
     marginBottom: 10,

@@ -1,19 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   View,
   StyleSheet,
   Keyboard,
   ScrollView,
   Dimensions,
+  ActivityIndicator,
 } from 'react-native';
 import { Container, Header, Icon, Item, Input, Text } from 'native-base';
+import { useFocusEffect } from '@react-navigation/native';
 
 import ProductList from './ProductList';
 import SearchedProducts from './SearchedProducts';
 import Banner from '../../Shared/Banner';
 import CategoryFilter from './CategoryFilter';
-const data = require('./../../assets/data/products.json');
-const categoriesJson = require('./../../assets/data/categories.json');
+import Loading from '../../Shared/Loading';
+import config from './../../config/config';
 let height = Dimensions.get('window').height;
 
 const ProductContainer = (props) => {
@@ -24,20 +26,43 @@ const ProductContainer = (props) => {
   const [categories, setCategories] = useState([]);
   const [productCategory, setProductCategory] = useState([]);
   const [active, setActive] = useState();
+  const [loading, setLoading] = useState(true);
+  const serverUrl = config.SERVER_URL;
 
-  useEffect(() => {
-    setProducts(data);
-    setProductFiltered(data);
-    setCategories(categoriesJson);
-    setProductCategory(data);
-    setActive(-1);
-    //To avoid memory leaks
-    return () => {
-      setProducts();
-      setProductFiltered();
-      setCategories([]);
-    };
-  }, []);
+  const loadApi = async () => {
+    //products
+    try {
+      let response = await fetch(`${serverUrl}/products`);
+      let products = await response.json();
+      setProducts(products);
+      setProductFiltered(products);
+      setProductCategory(products);
+    } catch (err) {
+      console.error(err.message);
+      return false;
+    }
+
+    //categories
+    try {
+      let response = await fetch(`${serverUrl}/categories`);
+      let categories = await response.json();
+      setCategories(categories);
+    } catch (err) {
+      console.error(err.message);
+      return false;
+    }
+
+    setTimeout(() => {
+      setLoading(false);
+    }, 200);
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      setActive(-1);
+      loadApi();
+    }, [])
+  );
 
   const searchProduct = (text) => {
     setText(text);
@@ -64,71 +89,83 @@ const ProductContainer = (props) => {
     category == 'all'
       ? (setProductCategory(products), setActive(true))
       : (setProductCategory(
-          products.filter((product) => product.category.$oid === category)
+          products.filter((product) => product.category._id === category)
         ),
         setActive(true));
   };
 
   return (
-    <Container>
-      <Header searchBar rounded>
-        <Item>
-          <Icon name="ios-search" />
-          <Input
-            placeholder="Search"
-            value={text}
-            onFocus={openList}
-            onChangeText={(text) => {
-              searchProduct(text);
-            }}
-          />
-          {focus == true ? <Icon onPress={onBlur} name="ios-close" /> : null}
-        </Item>
-      </Header>
-      {focus == true ? (
-        <ScrollView style={{ paddingBottom: 10 }}>
-          <SearchedProducts
-            productsFiltered={productsFiltered}
-            navigation={props.navigation}
-          />
-        </ScrollView>
-      ) : (
-        <ScrollView>
-          <View style={styles.banner}>
-            <Banner />
-          </View>
-          <View style={styles.categoryFilter}>
-            <CategoryFilter
-              categories={categories}
-              categoryFilter={changeCategory}
-              productCategory={productCategory}
-              active={active}
-              setActive={setActive}
-            />
-          </View>
-          {productCategory.length > 0 ? (
-            <View
-              style={[
-                styles.listContainer,
-                productCategory.length < 3 ? styles.minHeights : '',
-              ]}
-            >
-              {productCategory.map((product) => (
-                <ProductList
-                  key={product._id.$oid}
-                  item={product}
-                  navigation={props.navigation}
-                />
-              ))}
-            </View>
+    <React.Fragment>
+      {/* {loading && (
+        <Container style={styles.activityContainer}>
+          <ActivityIndicator size="large" color="red" />
+        </Container>
+      )} */}
+      {loading && <Loading />}
+      {!loading && (
+        <Container>
+          <Header searchBar rounded>
+            <Item>
+              <Icon name="ios-search" />
+              <Input
+                placeholder="Search"
+                value={text}
+                onFocus={openList}
+                onChangeText={(text) => {
+                  searchProduct(text);
+                }}
+              />
+              {focus == true ? (
+                <Icon onPress={onBlur} name="ios-close" />
+              ) : null}
+            </Item>
+          </Header>
+          {focus == true ? (
+            <ScrollView style={{ paddingBottom: 10 }}>
+              <SearchedProducts
+                productsFiltered={productsFiltered}
+                navigation={props.navigation}
+              />
+            </ScrollView>
           ) : (
-            <View style={[styles.center, styles.noProduct]}>
-              <Text>No Product Found</Text>
-            </View>
+            <ScrollView>
+              <View style={styles.banner}>
+                <Banner />
+              </View>
+              <View style={styles.categoryFilter}>
+                <CategoryFilter
+                  categories={categories}
+                  categoryFilter={changeCategory}
+                  productCategory={productCategory}
+                  active={active}
+                  setActive={setActive}
+                />
+              </View>
+              {productCategory.length > 0 ? (
+                <View
+                  style={[
+                    styles.listContainer,
+                    productCategory.length < 3 ? styles.minHeights : '',
+                  ]}
+                >
+                  {productCategory.map((product) => (
+                    <ProductList
+                      key={Math.random(1, 1000000000)}
+                      item={product}
+                      navigation={props.navigation}
+                    />
+                  ))}
+                </View>
+              ) : (
+                <View style={[styles.center, styles.noProduct]}>
+                  <Text>No Product Found</Text>
+                </View>
+              )}
+            </ScrollView>
           )}
-        </ScrollView>
+        </Container>
       )}
-    </Container>
+    </React.Fragment>
   );
 };
 
@@ -156,6 +193,11 @@ const styles = StyleSheet.create({
   },
   categoryFilter: {
     height: 60,
+  },
+  activityContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#f2f2f2',
   },
 });
 
