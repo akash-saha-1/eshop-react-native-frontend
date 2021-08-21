@@ -1,15 +1,16 @@
 import React from 'react';
-import { StyleSheet, Image, View } from 'react-native';
+import { StyleSheet, Image } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Header = () => {
   return (
-    <View style={styles.header}>
+    <SafeAreaView style={styles.header}>
       <Image
         source={require('./../assets/header-logo.jpg')}
         resizeMode="contain"
         style={styles.image}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 

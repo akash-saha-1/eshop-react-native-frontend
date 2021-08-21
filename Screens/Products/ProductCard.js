@@ -8,6 +8,7 @@ import {
   Button,
   TouchableOpacity,
 } from 'react-native';
+import Toast from 'react-native-toast-message';
 import { connect } from 'react-redux';
 import * as actions from './../../Redux/Actions/CartActions';
 
@@ -36,6 +37,12 @@ const ProductCard = (props) => {
             <TouchableOpacity
               onPress={() => {
                 props.addItemToCart(props);
+                Toast.show({
+                  topOffset: 70,
+                  type: 'success',
+                  text1: `${name} added to Cart`,
+                  text2: 'Go to your cart to complete order',
+                });
               }}
               style={styles.button}
             >
