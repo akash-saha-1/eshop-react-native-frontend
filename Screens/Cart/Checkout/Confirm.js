@@ -3,6 +3,7 @@ import { View, StyleSheet, Dimensions, ScrollView, Button } from 'react-native';
 import { Text, Left, Right, Body, ListItem, Thumbnail } from 'native-base';
 import { connect } from 'react-redux';
 import * as actions from './../../../Redux/Actions/CartActions';
+import EasyButton from '../../../Shared/StyledComponents/EasyButton';
 
 const { width, height } = Dimensions.get('window');
 
@@ -53,7 +54,9 @@ const Confirm = (props) => {
           </View>
         ) : null}
         <View style={styles.buttonView}>
-          <Button title="Place Order" onPress={confirmOrder} />
+          <EasyButton primary large onPress={confirmOrder}>
+            <Text style={{ color: 'white' }}>Place Order</Text>
+          </EasyButton>
         </View>
       </View>
     </ScrollView>

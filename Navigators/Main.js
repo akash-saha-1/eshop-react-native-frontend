@@ -63,6 +63,9 @@ const Main = () => {
       <Tab.Screen
         name="User"
         component={UserNavigator}
+        onPress={() => {
+          console.log('pressed');
+        }}
         options={{
           tabBarIcon: ({ color, size }) => (
             <Icon name="user" color={color} size={size} />

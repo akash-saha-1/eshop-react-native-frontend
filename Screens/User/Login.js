@@ -8,19 +8,27 @@ import Input from './../../Shared/Form/Input';
 import AuthGlobal from '../../Context/store/AuthGlobal';
 import { loginUser } from '../../Context/actions/AuthActions';
 import Loading from '../../Shared/Loading';
+import EasyButton from '../../Shared/StyledComponents/EasyButton';
 
 const Login = (props) => {
   const context = useContext(AuthGlobal);
 
-  const [email, setEmail] = useState('akash@gmail.com');
-  const [password, setPassword] = useState('12345');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loginScreen, setLoginScreen] = useState(false);
   const loading = context.state.loading;
 
   useEffect(() => {
-    if (context.state.isAuthenticated === true) {
-      props.navigation.navigate('User Profile');
-    }
+    const profilePageShift = () => {
+      if (context.state.isAuthenticated === true) {
+        setLoginScreen(false);
+        props.navigation.navigate('User Profile');
+      } else {
+        setLoginScreen(true);
+      }
+    };
+    profilePageShift();
   }, [context.state.isAuthenticated]);
 
   const handleSubmit = () => {
@@ -39,8 +47,8 @@ const Login = (props) => {
   return (
     <React.Fragment>
       {loading && <Loading />}
-      {!loading && (
-        <FormContainer title="input">
+      {!loading && loginScreen && (
+        <FormContainer title="Login">
           <Input
             placeholder="Enter Email"
             name="email"
@@ -58,16 +66,21 @@ const Login = (props) => {
           />
           <View style={styles.buttonGroup}>
             {error ? <Error message={error} /> : null}
-            <Button title="Login" onPress={handleSubmit} />
+            <EasyButton primary large onPress={handleSubmit}>
+              <Text style={{ color: 'white' }}>Login</Text>
+            </EasyButton>
           </View>
           <View style={[styles.buttonGroup, { marginTop: 40 }]}>
             <Text style={styles.middleText}>Dont't have an account yet?</Text>
-            <Button
-              title="Register"
+            <EasyButton
+              secondary
+              large
               onPress={() => {
                 props.navigation.navigate('Register');
               }}
-            />
+            >
+              <Text style={{ color: 'white' }}>Register</Text>
+            </EasyButton>
           </View>
         </FormContainer>
       )}

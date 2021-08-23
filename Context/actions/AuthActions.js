@@ -22,7 +22,17 @@ export const loginUser = (user, dispatch) => {
       //console.log(data);
       if (data) {
         const token = data.token;
+        // expiration day calculation
+        const expirationDays = data.expirationDays;
+        const DateOfExpiration = new Date();
+        DateOfExpiration.setDate(
+          DateOfExpiration.getDate() + parseInt(expirationDays)
+        );
         AsyncStorage.setItem('jwt', token);
+        AsyncStorage.setItem(
+          'DateOfExpiration',
+          DateOfExpiration.toDateString()
+        );
         const decoded = jwtDecode(token);
         dispatch(setCurrentUser(decoded, user));
       } else {
@@ -45,6 +55,7 @@ export const loginUser = (user, dispatch) => {
 
 export const logout = (dispatch) => {
   AsyncStorage.removeItem('jwt');
+  AsyncStorage.removeItem('DateOfExpiration');
   dispatch(setCurrentUser({}));
 };
 

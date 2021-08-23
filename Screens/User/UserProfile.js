@@ -8,6 +8,7 @@ import config from './../../config/config';
 import AuthGlobal from '../../Context/store/AuthGlobal';
 import { logout } from '../../Context/actions/AuthActions';
 import Loading from '../../Shared/Loading';
+import EasyButton from '../../Shared/StyledComponents/EasyButton';
 
 const UserProfile = (props) => {
   const context = useContext(AuthGlobal);
@@ -74,12 +75,15 @@ const UserProfile = (props) => {
                 </Text>
               </View>
               <View style={styles.buttonContainer}>
-                <Button
-                  title="Sign Out"
+                <EasyButton
+                  secondary
+                  large
                   onPress={() => {
                     logout(context.dispatch);
                   }}
-                />
+                >
+                  <Text style={{ color: 'white' }}>Sign Out</Text>
+                </EasyButton>
               </View>
             </ScrollView>
           )}

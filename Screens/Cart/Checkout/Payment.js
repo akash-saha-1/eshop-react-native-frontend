@@ -15,6 +15,7 @@ import {
 } from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import * as Font from 'expo-font';
+import EasyButton from '../../../Shared/StyledComponents/EasyButton';
 
 const methods = [
   { name: 'Cash on Delivery', value: 1 },
@@ -97,12 +98,16 @@ const Payment = (props) => {
               </Picker>
             ) : null}
             <View style={styles.view}>
-              <Button
-                title="Confirm Payment"
+              <EasyButton
+                primary
+                large
                 onPress={() => {
                   props.navigation.navigate('Confirm', { order });
                 }}
-              />
+                style={styles.button}
+              >
+                <Text style={{ color: 'white' }}>Confirm Payment</Text>
+              </EasyButton>
             </View>
           </Content>
         </Container>
@@ -121,6 +126,9 @@ const styles = StyleSheet.create({
   view: {
     marginTop: 50,
     alignSelf: 'center',
+  },
+  button: {
+    width: 170,
   },
 });
 

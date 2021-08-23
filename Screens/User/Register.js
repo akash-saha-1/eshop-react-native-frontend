@@ -7,6 +7,7 @@ import Error from '../../Shared/Error';
 import Loading from '../../Shared/Loading';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import config from './../../config/config';
+import EasyButton from '../../Shared/StyledComponents/EasyButton';
 
 const Register = (props) => {
   const [email, setEmail] = useState('');
@@ -116,15 +117,20 @@ const Register = (props) => {
               {error ? <Error message={error} /> : null}
             </View>
             <View style={styles.buttonGroup}>
-              <Button title="Register" onPress={register} />
+              <EasyButton primary large onPress={register}>
+                <Text style={{ color: 'white' }}>Register</Text>
+              </EasyButton>
             </View>
             <View style={styles.buttonGroup}>
-              <Button
-                title="Back to Login"
+              <EasyButton
+                secondary
+                large
                 onPress={() => {
                   props.navigation.navigate('Login');
                 }}
-              />
+              >
+                <Text style={{ color: 'white' }}>Back to Login</Text>
+              </EasyButton>
             </View>
           </FormContainer>
         </KeyboardAwareScrollView>

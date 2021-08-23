@@ -13,15 +13,23 @@ const AdminNavigator = () => {
       <Stack.Screen
         name="Products"
         component={Products}
-        options={{ title: 'Products' }}
+        options={{ title: 'Products', headerTitleAlign: 'center' }}
       />
       <Stack.Screen
         name="Categories"
         component={Categories}
-        options={{ title: 'Categories' }}
+        options={{ title: 'Categories', headerTitleAlign: 'center' }}
       />
-      <Stack.Screen name="Orders" component={Orders} />
-      <Stack.Screen name="ProductForm" component={ProductForm} />
+      <Stack.Screen
+        name="Orders"
+        component={Orders}
+        options={{ headerTitleAlign: 'center' }}
+      />
+      <Stack.Screen
+        name="Product Form"
+        component={ProductForm}
+        options={{ headerTitleAlign: 'center' }}
+      />
     </Stack.Navigator>
   );
 };

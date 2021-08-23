@@ -17,12 +17,28 @@ const AuthContext = (props) => {
 
   useEffect(() => {
     setShowChild(true);
-    if (AsyncStorage.jwt) {
-      const decoded = AsyncStorage.jwt;
-      if (setShowChild) {
-        dispatch(setCurrentUser(jwtDecode(decoded)));
-      }
-    }
+    //AsyncStorage.removeItem('jwt');
+    //AsyncStorage.removeItem('DateOfExpiration');
+    AsyncStorage.getItem('jwt')
+      .then((jwt) => {
+        if (jwt && jwt.length > 0) {
+          AsyncStorage.getItem('DateOfExpiration')
+            .then((dateOfExpiration) => {
+              if (dateOfExpiration && dateOfExpiration.length > 0) {
+                const today = new Date();
+                const futureDate = new Date(dateOfExpiration);
+                if (futureDate.getTime() > today.getTime()) {
+                  const decoded = jwtDecode(jwt);
+                  dispatch(setCurrentUser(decoded));
+                }
+              }
+            })
+            .catch((err) => console.log(err.message));
+        } else {
+          console.log('jwt not found for the user');
+        }
+      })
+      .catch((err) => console.log(err.message));
   }, []);
 
   if (!showChild) {

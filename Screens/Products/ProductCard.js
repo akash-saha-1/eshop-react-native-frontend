@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import Toast from 'react-native-toast-message';
 import { connect } from 'react-redux';
+import EasyButton from '../../Shared/StyledComponents/EasyButton';
 import * as actions from './../../Redux/Actions/CartActions';
 
 let width = Dimensions.get('window').width;
@@ -34,7 +35,7 @@ const ProductCard = (props) => {
         <Text style={styles.price}>₹{price}</Text>
         {countInStock > 0 ? (
           <View style={styles.buttonContainer}>
-            <TouchableOpacity
+            <EasyButton
               onPress={() => {
                 props.addItemToCart(props);
                 Toast.show({
@@ -47,7 +48,7 @@ const ProductCard = (props) => {
               style={styles.button}
             >
               <Text style={styles.buttonText}>Add Item</Text>
-            </TouchableOpacity>
+            </EasyButton>
           </View>
         ) : (
           <Text style={{ marginTop: 20 }}>Currently Unavailable</Text>
@@ -67,7 +68,7 @@ const mapDispatchToProps = (dispatch) => {
 const styles = StyleSheet.create({
   container: {
     width: width / 2 - 10,
-    height: width / 1.5,
+    height: width / 1.45,
     padding: 10,
     borderRadius: 10,
     marginTop: 10,

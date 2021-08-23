@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import {
   View,
   StyleSheet,
@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { Container, Header, Icon, Item, Input, Text } from 'native-base';
 import { useFocusEffect } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import ProductList from './ProductList';
 import SearchedProducts from './SearchedProducts';
@@ -57,12 +58,21 @@ const ProductContainer = (props) => {
     }, 200);
   };
 
-  useFocusEffect(
-    useCallback(() => {
-      setActive(-1);
-      loadApi();
-    }, [])
-  );
+  // usefocus effect was not workign fine
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     setActive(-1);
+  //     loadApi();
+  //   }, [])
+  // );
+
+  useEffect(() => {
+    setActive(-1);
+    loadApi();
+    return () => {
+      setActive();
+    };
+  }, []);
 
   const searchProduct = (text) => {
     setText(text);

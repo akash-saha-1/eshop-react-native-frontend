@@ -12,6 +12,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { connect } from 'react-redux';
 import FormContainer from '../../../Shared/Form/FormContainer';
 import Input from '../../../Shared/Form/Input';
+import EasyButton from '../../../Shared/StyledComponents/EasyButton';
 
 const countries = require('./../../../assets/countries.json');
 
@@ -102,7 +103,9 @@ const Checkout = (props) => {
           </Picker>
         </Item>
         <View style={styles.view}>
-          <Button title="Confirm Order" onPress={() => checkOut()} />
+          <EasyButton primary large onPress={() => checkOut()}>
+            <Text style={{ color: 'white' }}>Confirm Order</Text>
+          </EasyButton>
         </View>
       </FormContainer>
     </KeyboardAwareScrollView>
