@@ -18,7 +18,6 @@ const UserProfile = (props) => {
   const [loading, setLoading] = useState(true);
   const [orders, setOrders] = useState();
   const serverUrl = config.SERVER_URL;
-  console.log(1);
 
   useEffect(() => {
     if (
@@ -77,7 +76,6 @@ const UserProfile = (props) => {
 
   useFocusEffect(
     useCallback(() => {
-      console.log(2);
       setLoading(true);
 
       const getUserOrders = async () => {
@@ -184,7 +182,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   order: {
-    marginTop: 50,
+    marginTop: 30,
     alignItems: 'center',
     marginBottom: 80,
   },

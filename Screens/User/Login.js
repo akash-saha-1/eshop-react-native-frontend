@@ -1,5 +1,6 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useCallback } from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import Error from '../../Shared/Error';
 import FormContainer from './../../Shared/Form/FormContainer';
 import Input from './../../Shared/Form/Input';
@@ -16,26 +17,19 @@ const Login = (props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [loginScreen, setLoginScreen] = useState(false);
+  const [loginScreen, setLoginScreen] = useState(true);
   const loading = context.state.loading;
-  console.log(3);
-  useEffect(() => {
-    const profilePageShift = () => {
+
+  useFocusEffect(
+    useCallback(() => {
       if (context.state.isAuthenticated === true) {
         setLoginScreen(false);
         props.navigation.navigate('User Profile');
       } else {
         setLoginScreen(true);
       }
-    };
-    profilePageShift();
-    return () => {
-      setEmail();
-      setPassword('');
-      setError('');
-      setLoginScreen(false);
-    };
-  }, [context.state.isAuthenticated]);
+    }, [context.state.isAuthenticated])
+  );
 
   const handleSubmit = () => {
     const user = {

@@ -1,12 +1,12 @@
 {
   "expo": {
-    "name": "eshop-ui-app",
-    "slug": "eshop-ui-app",
+    "name": "EasyShop",
+    "slug": "EasyShop",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/app-icon.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/shooping-cart.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },

@@ -17,7 +17,13 @@ const Register = (props) => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const serverUrl = config.SERVER_URL;
-  console.log(4);
+
+  function validateEmail(email) {
+    const re =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+  }
+
   const register = useCallback(async () => {
     setLoading(false);
     setError('');
@@ -28,6 +34,8 @@ const Register = (props) => {
       name.trim() === ''
     ) {
       setError('Please fill your all details correctly!');
+    } else if (!validateEmail(email)) {
+      setError('Please give correct Email Address to Register');
     } else {
       setLoading(true);
       let user = { name, email, password, phone, isAdmin: false };
