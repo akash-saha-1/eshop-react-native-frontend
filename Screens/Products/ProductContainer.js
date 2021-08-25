@@ -8,8 +8,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { Container, Header, Icon, Item, Input, Text } from 'native-base';
-import { useFocusEffect } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useIsFocused } from '@react-navigation/native';
 
 import ProductList from './ProductList';
 import SearchedProducts from './SearchedProducts';
@@ -29,6 +28,8 @@ const ProductContainer = (props) => {
   const [active, setActive] = useState();
   const [loading, setLoading] = useState(true);
   const serverUrl = config.SERVER_URL;
+
+  const isFocused = useIsFocused();
 
   const loadApi = async () => {
     //products
@@ -58,21 +59,21 @@ const ProductContainer = (props) => {
     }, 200);
   };
 
-  // usefocus effect was not workign fine
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     setActive(-1);
-  //     loadApi();
-  //   }, [])
-  // );
-
   useEffect(() => {
+    setLoading(true);
     setActive(-1);
     loadApi();
+
+    //when ever component is destroyed to clean our data
     return () => {
       setActive();
+      setProducts();
+      setProductFiltered();
+      setProductCategory();
+      setCategories();
+      setLoading();
     };
-  }, []);
+  }, [isFocused]);
 
   const searchProduct = (text) => {
     setText(text);
@@ -151,7 +152,7 @@ const ProductContainer = (props) => {
                   setActive={setActive}
                 />
               </View>
-              {productCategory.length > 0 ? (
+              {productCategory && productCategory.length > 0 ? (
                 <View
                   style={[
                     styles.listContainer,

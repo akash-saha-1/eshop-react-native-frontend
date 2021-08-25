@@ -13,10 +13,15 @@ const styles = StyleSheet.create({
   conatiner: {
     width: '100%',
     alignItems: 'center',
+    justifyContent: 'center',
     margin: 10,
   },
   text: {
     color: 'red',
+    fontSize: 18,
+    alignSelf: 'center',
+    paddingHorizontal: 20,
+    textAlign: 'center',
   },
 });
 

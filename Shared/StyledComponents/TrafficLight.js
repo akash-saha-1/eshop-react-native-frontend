@@ -1,10 +1,10 @@
 import styled, { css } from 'styled-components/native';
 
 const TrafficLight = styled.View`
-  borderRadius: 50px;
   height: 10px;
   width: 10px;
   padding: 10px;
+  borderRadius: 50px;
 
   ${(props) =>
     props.available &&
@@ -13,7 +13,7 @@ const TrafficLight = styled.View`
     `}
 
   ${(props) =>
-    props.limted &&
+    props.limited &&
     css`
       background: #dde033;
     `}

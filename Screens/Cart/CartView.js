@@ -1,27 +1,14 @@
-import React from 'react';
-import {
-  View,
-  Dimensions,
-  StyleSheet,
-  Button,
-  TouchableOpacity,
-} from 'react-native';
-import {
-  Container,
-  Text,
-  Left,
-  Right,
-  H1,
-  ListItem,
-  Thumbnail,
-  Body,
-} from 'native-base';
+import React, { useContext, useState, useEffect } from 'react';
+import { View, Dimensions, StyleSheet, TouchableOpacity } from 'react-native';
+import { Container, Text, Left, Right, H1 } from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Toast from 'react-native-toast-message';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import { connect } from 'react-redux';
 import * as actions from './../../Redux/Actions/CartActions';
 import CartItem from './CartItem';
 import EasyButton from '../../Shared/StyledComponents/EasyButton';
+import AuthGlobal from '../../Context/store/AuthGlobal';
 
 let { width, height } = Dimensions.get('window');
 
@@ -31,10 +18,37 @@ String.prototype.toUpperCase = function () {
 };
 
 const CartView = (props) => {
+  const context = useContext(AuthGlobal);
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  useEffect(() => {
+    if (context.state.isAuthenticated === true) {
+      setLoggedIn(true);
+    }
+
+    return () => {
+      setLoggedIn();
+    };
+  }, [context.state]);
+
   let total = 0;
   props.cartItems.forEach((item) => {
     total += item.product.price;
   });
+
+  const checkOut = () => {
+    if (!loggedIn || loggedIn == false) {
+      Toast.show({
+        topOffset: 70,
+        type: 'error',
+        text1: 'Please Login to Place Order',
+        text2: '',
+      });
+      return false;
+    }
+    props.navigation.navigate('Checkout');
+  };
+
   return (
     <React.Fragment>
       {props.cartItems.length > 0 ? (
@@ -67,19 +81,23 @@ const CartView = (props) => {
             </Left>
             <Right>
               <EasyButton danger medium onPress={() => props.clearCart()}>
-                <Text style={{ color: 'white' }}>Clear Cart</Text>
+                <Text style={{ color: 'white' }}>Clear</Text>
               </EasyButton>
             </Right>
             <Right>
-              <EasyButton
-                medium
-                primary
-                onPress={() => {
-                  props.navigation.navigate('Checkout');
-                }}
-              >
-                <Text style={{ color: 'white' }}>Checkout</Text>
-              </EasyButton>
+              {loggedIn ? (
+                <EasyButton medium primary onPress={checkOut}>
+                  <Text style={{ color: 'white' }}>Checkout</Text>
+                </EasyButton>
+              ) : (
+                <EasyButton
+                  medium
+                  secondary
+                  onPress={() => props.navigation.navigate('Login')}
+                >
+                  <Text style={{ color: 'white' }}>Login</Text>
+                </EasyButton>
+              )}
             </Right>
           </View>
         </Container>

@@ -22,26 +22,27 @@ const CategoryFilter = (props) => {
             <Text style={styles.text}>All</Text>
           </Badge>
         </TouchableOpacity>
-        {props.categories.map((category) => (
-          <TouchableOpacity
-            key={category._id}
-            onPress={() => {
-              props.categoryFilter(category._id);
-              props.setActive(props.categories.indexOf(category));
-            }}
-          >
-            <Badge
-              style={[
-                styles.badge,
-                props.active == props.categories.indexOf(category)
-                  ? styles.active
-                  : styles.inActive,
-              ]}
+        {props.categories &&
+          props.categories.map((category) => (
+            <TouchableOpacity
+              key={category._id}
+              onPress={() => {
+                props.categoryFilter(category._id);
+                props.setActive(props.categories.indexOf(category));
+              }}
             >
-              <Text style={styles.text}>{category.name}</Text>
-            </Badge>
-          </TouchableOpacity>
-        ))}
+              <Badge
+                style={[
+                  styles.badge,
+                  props.active == props.categories.indexOf(category)
+                    ? styles.active
+                    : styles.inActive,
+                ]}
+              >
+                <Text style={styles.text}>{category.name}</Text>
+              </Badge>
+            </TouchableOpacity>
+          ))}
       </ListItem>
     </ScrollView>
   );

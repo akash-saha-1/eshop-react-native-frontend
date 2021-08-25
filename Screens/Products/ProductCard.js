@@ -36,6 +36,7 @@ const ProductCard = (props) => {
         {countInStock > 0 ? (
           <View style={styles.buttonContainer}>
             <EasyButton
+              large
               onPress={() => {
                 props.addItemToCart(props);
                 Toast.show({
@@ -112,7 +113,7 @@ const styles = StyleSheet.create({
   },
   button: {
     height: 30,
-    width: 85,
+    width: 100,
     backgroundColor: 'green',
     borderRadius: 2,
     justifyContent: 'center',

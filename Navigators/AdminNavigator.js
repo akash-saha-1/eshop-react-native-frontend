@@ -1,6 +1,6 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import Products from '../Screens/Admin/Product';
+import Products from '../Screens/Admin/Products';
 import Categories from '../Screens/Admin/Categories';
 import Orders from '../Screens/Admin/Orders';
 import ProductForm from '../Screens/Admin/ProductForm';
@@ -26,7 +26,7 @@ const AdminNavigator = () => {
         options={{ headerTitleAlign: 'center' }}
       />
       <Stack.Screen
-        name="Product Form"
+        name="ProductForm"
         component={ProductForm}
         options={{ headerTitleAlign: 'center' }}
       />

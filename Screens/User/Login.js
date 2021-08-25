@@ -18,7 +18,7 @@ const Login = (props) => {
   const [error, setError] = useState('');
   const [loginScreen, setLoginScreen] = useState(false);
   const loading = context.state.loading;
-
+  console.log(3);
   useEffect(() => {
     const profilePageShift = () => {
       if (context.state.isAuthenticated === true) {
@@ -29,6 +29,12 @@ const Login = (props) => {
       }
     };
     profilePageShift();
+    return () => {
+      setEmail();
+      setPassword('');
+      setError('');
+      setLoginScreen(false);
+    };
   }, [context.state.isAuthenticated]);
 
   const handleSubmit = () => {
@@ -92,6 +98,7 @@ const styles = StyleSheet.create({
   buttonGroup: {
     width: '80%',
     alignItems: 'center',
+    marginTop: 10,
   },
   middleText: {
     alignSelf: 'center',

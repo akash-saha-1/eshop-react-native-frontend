@@ -24,7 +24,9 @@ const ListItem = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
 
   return (
-    <View>
+    <View
+      style={props.index === props.length - 1 ? { marginBottom: 40 } : null}
+    >
       <Modal
         animationType="fade"
         transparent={true}
@@ -47,14 +49,21 @@ const ListItem = (props) => {
                 secondary
                 onPress={() => {
                   setModalVisible(false);
-                  props.navigation.navigate('Product Form');
+                  props.navigation.navigate('ProductForm', { item: props });
                 }}
               >
                 <Text style={styles.textStyle}>Edit</Text>
               </EasyButton>
             </View>
             <View style={styles.button}>
-              <EasyButton medium danger>
+              <EasyButton
+                medium
+                danger
+                onPress={() => {
+                  props.delete(props._id);
+                  setModalVisible(false);
+                }}
+              >
                 <Text style={styles.textStyle}>Delete</Text>
               </EasyButton>
             </View>

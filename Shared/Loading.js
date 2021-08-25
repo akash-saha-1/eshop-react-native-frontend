@@ -3,9 +3,9 @@ import { Image, Dimensions, StyleSheet, View } from 'react-native';
 
 let { width, height } = Dimensions.get('window');
 
-const Loading = () => {
+const Loading = (props) => {
   return (
-    <View>
+    <View style={{ ...props.style }}>
       <Image
         source={require('./../assets/loading.gif')}
         resizeMode="cover"

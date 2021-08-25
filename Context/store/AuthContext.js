@@ -17,8 +17,7 @@ const AuthContext = (props) => {
 
   useEffect(() => {
     setShowChild(true);
-    //AsyncStorage.removeItem('jwt');
-    //AsyncStorage.removeItem('DateOfExpiration');
+
     AsyncStorage.getItem('jwt')
       .then((jwt) => {
         if (jwt && jwt.length > 0) {
@@ -30,6 +29,9 @@ const AuthContext = (props) => {
                 if (futureDate.getTime() > today.getTime()) {
                   const decoded = jwtDecode(jwt);
                   dispatch(setCurrentUser(decoded));
+                } else {
+                  AsyncStorage.removeItem('jwt');
+                  AsyncStorage.removeItem('DateOfExpiration');
                 }
               }
             })

@@ -17,11 +17,10 @@ const Register = (props) => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const serverUrl = config.SERVER_URL;
-
+  console.log(4);
   const register = useCallback(async () => {
     setLoading(false);
     setError('');
-    console.log(email, password, phone, name);
     if (
       email.trim() === '' ||
       password.trim() === '' ||
@@ -63,7 +62,12 @@ const Register = (props) => {
         });
         return false;
       } finally {
-        setLoading(false);
+        setEmail();
+        setName();
+        setPhone();
+        setPassword();
+        setError();
+        setLoading();
       }
     }
   }, [email, password, phone, name]);

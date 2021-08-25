@@ -16,6 +16,7 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome';
 import * as Font from 'expo-font';
 import EasyButton from '../../../Shared/StyledComponents/EasyButton';
+import Toast from 'react-native-toast-message';
 
 const methods = [
   { name: 'Cash on Delivery', value: 1 },
@@ -46,6 +47,11 @@ const Payment = (props) => {
       setFontLoaded(true);
     };
     loadFont();
+    return () => {
+      setFontLoaded();
+      setCard();
+      setSelected();
+    };
   }, []);
 
   const order = props.route.params
@@ -53,6 +59,32 @@ const Payment = (props) => {
       ? props.route.params.order
       : null
     : null;
+
+  const payment = () => {
+    if (!order) {
+      Toast.show({
+        topOffset: 70,
+        type: 'error',
+        text1: 'Please fill out all the details of Order',
+        text2: '',
+      });
+      return false;
+    } else if (!selected || (selected === 3 && !card)) {
+      Toast.show({
+        topOffset: 70,
+        type: 'error',
+        text1: 'Please select the payment method',
+        text2: '',
+      });
+      return false;
+    }
+    let paymentMethod = methods[selected - 1].name;
+    props.navigation.navigate('Confirm', {
+      order,
+      payment: paymentMethod,
+      card,
+    });
+  };
 
   return (
     <>
@@ -98,14 +130,7 @@ const Payment = (props) => {
               </Picker>
             ) : null}
             <View style={styles.view}>
-              <EasyButton
-                primary
-                large
-                onPress={() => {
-                  props.navigation.navigate('Confirm', { order });
-                }}
-                style={styles.button}
-              >
+              <EasyButton primary large onPress={payment} style={styles.button}>
                 <Text style={{ color: 'white' }}>Confirm Payment</Text>
               </EasyButton>
             </View>
@@ -118,10 +143,11 @@ const Payment = (props) => {
 
 const styles = StyleSheet.create({
   picker: {
-    width: 140,
+    width: 160,
     justifyContent: 'center',
     alignItems: 'center',
     marginLeft: 20,
+    marginTop: 10,
   },
   view: {
     marginTop: 50,

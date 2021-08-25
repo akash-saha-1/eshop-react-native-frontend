@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   View,
   Text,
@@ -13,24 +13,51 @@ import { connect } from 'react-redux';
 import FormContainer from '../../../Shared/Form/FormContainer';
 import Input from '../../../Shared/Form/Input';
 import EasyButton from '../../../Shared/StyledComponents/EasyButton';
+import Toast from 'react-native-toast-message';
+import AuthGlobal from './../../../Context/store/AuthGlobal';
 
-const countries = require('./../../../assets/countries.json');
+const countries = require('../../../assets/countries.json');
 
-const Checkout = (props) => {
+const Shipping = (props) => {
   const [orderItems, setOrderItems] = useState();
   const [address, setAddress] = useState();
   const [address2, setAddress2] = useState();
   const [city, setCity] = useState();
   const [zip, setZip] = useState();
-  const [country, setCountry] = useState();
+  const [country, setCountry] = useState('India');
   const [phone, setPhone] = useState();
+  const [userId, setUserId] = useState();
+  const context = useContext(AuthGlobal);
 
   useEffect(() => {
     setOrderItems(props.cartItems);
-    setTimeout(() => setCountry('India'), 100); //default India
+    setUserId(context.state.user.userId);
+    //setTimeout(() => setCountry('India'), 300); //default India
+
+    return () => {
+      setOrderItems();
+      setUserId();
+      setAddress();
+      setAddress2();
+      setCity();
+      setZip();
+      setCountry();
+      setPhone();
+      setUserId();
+    };
   }, []);
 
   const checkOut = () => {
+    if (!city || !country || !orderItems || !phone || !address || !zip) {
+      Toast.show({
+        topOffset: 70,
+        type: 'error',
+        text1: 'Please fill out all the fields to proceed.',
+        text2: '',
+      });
+      return false;
+    }
+
     let order = {
       city,
       country,
@@ -40,6 +67,7 @@ const Checkout = (props) => {
       shippingAddress1: address,
       shippingAddress2: address2,
       zip,
+      userId,
     };
     props.navigation.navigate('Payment', { order: order });
   };
@@ -133,4 +161,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, null)(Checkout);
+export default connect(mapStateToProps, null)(Shipping);

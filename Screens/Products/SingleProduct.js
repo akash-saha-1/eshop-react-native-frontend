@@ -42,7 +42,7 @@ const SingleProduct = (props) => {
                 ? item.image
                 : 'https://5.imimg.com/data5/PU/TT/MY-58239331/empty-cardboard-box-500x500.jpg',
             }}
-            resizeMode="contain"
+            resizeMode="stretch"
             style={styles.image}
           />
         </View>
@@ -77,6 +77,7 @@ const SingleProduct = (props) => {
                 text2: 'Go to your cart to complete order',
               });
             }}
+            style={{ width: 150 }}
           >
             <Text style={{ color: 'white' }}>Add Item to Cart</Text>
           </EasyButton>
